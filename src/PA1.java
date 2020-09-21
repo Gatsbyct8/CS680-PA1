@@ -71,6 +71,8 @@ public class PA1 extends JFrame
 	private ArrayList<Point2D> triangles;
 	private boolean doSmoothShading;
 	private int Nsteps;
+	private boolean doTexture;
+	private boolean doAntiAliased;
 
 	public PA1()
 	{
@@ -102,6 +104,8 @@ public class PA1 extends JFrame
 	    lineSegs = new ArrayList<Point2D>();
 	    triangles = new ArrayList<Point2D>();
 	    doSmoothShading = false;
+	    doTexture = false;
+		doAntiAliased = false;
 	    try
 	    {
 	    	texture = ImageIO.read(new File("pattern.jpg"));
@@ -217,6 +221,14 @@ public class PA1 extends JFrame
 
 	    switch ( key.getKeyChar() ) 
 	    {
+			case 'M':
+			case 'm':
+				doTexture = !doTexture;
+				break;
+			case 'A':
+			case 'a':
+				doAntiAliased = !doAntiAliased;
+				break;
 	    case 'Q' :
 	    case 'q' : 
 	    	new Thread()
@@ -303,9 +315,12 @@ public class PA1 extends JFrame
 	    	
 	    	if (lineSegs.size()%2 == 1)
 	    		SketchBase.drawPoint(buff, lineSegs.get(lineSegs.size()-1));
-	    	else if (lineSegs.size() > 0)
+	    	else if (lineSegs.size() > 0 && doAntiAliased == false)
 	    		SketchBase.drawLine(buff, lineSegs.get(lineSegs.size()-2),
 	    				lineSegs.get(lineSegs.size()-1));
+			else if (lineSegs.size() > 0 && doAntiAliased == true)
+				SketchBase.drawLineWithAntiAliased(buff, lineSegs.get(lineSegs.size()-2),
+						lineSegs.get(lineSegs.size()-1));
 	    }
 	    // Pick the vertex closest to mouse down event using right button
 	    else if ( button == MouseEvent.BUTTON3 )
@@ -316,13 +331,18 @@ public class PA1 extends JFrame
 	    	
 	    	if (triangles.size()%3 == 1)
 	    		SketchBase.drawPoint(buff, triangles.get(triangles.size()-1));
-	    	else if (triangles.size()%3 == 2)
+	    	else if (triangles.size()%3 == 2 && doAntiAliased == false)
 	    		SketchBase.drawLine(buff, triangles.get(triangles.size()-2),
 	    				triangles.get(triangles.size()-1));
-	    	else if (triangles.size() > 0)
+			else if (triangles.size()%3 == 2 && doAntiAliased == true)
+				SketchBase.drawLineWithAntiAliased(buff, triangles.get(triangles.size()-2),
+						triangles.get(triangles.size()-1));
+	    	else if (triangles.size() > 0 && doTexture == false)
 	    		SketchBase.drawTriangle(buff, triangles.get(triangles.size()-3),
 	    				triangles.get(triangles.size()-2), triangles.get(triangles.size()-1), doSmoothShading);
-	    		
+	    	else if (triangles.size() > 0 && doTexture == true)
+				SketchBase.triangleTextureMap(buff, texture, triangles.get(triangles.size()-3),
+						triangles.get(triangles.size()-2), triangles.get(triangles.size()-1));
 	    }
 
 	}

@@ -37,6 +37,11 @@ public class SketchBase
 		drawPoints(map, buff);
 	}
 
+	public static void drawLineWithAntiAliased(BufferedImage buff, Point2D p1, Point2D p2){
+		HashMap<Integer, List<Point2D>> map = getLinePoints(p1, p2);
+		drawPoints(map, buff);
+	}
+
 	private static HashMap<Integer,List<Point2D>> getLinePoints(Point2D p1, Point2D p2) {
 		Point2D temp1 = new Point2D(p1);
 		Point2D temp2 = new Point2D(p2);
