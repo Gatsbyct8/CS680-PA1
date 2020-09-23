@@ -37,74 +37,6 @@ public class SketchBase
 		drawPoints(map, buff);
 	}
 
-	public static void drawLineWithAntiAliased(BufferedImage buff, Point2D p1, Point2D p2){
-		Point2D temp1 = new Point2D(p1);
-		Point2D temp2 = new Point2D(p2);
-		temp1.x *= 2;
-		temp1.y *= 2;
-		temp2.x *= 2;
-		temp2.y *= 2;
-		HashMap<Integer, List<Point2D>> map = getLinePoints(temp1, temp2);
-		drawPointsWithAliased(map, buff);
-	}
-
-	private static void drawPointsWithAliased(HashMap<Integer, List<Point2D>> map, BufferedImage buff) {
-		for (int i = 0; i < buff.getWidth()*2; i+=2){
-			for (int j = 0 ; j < buff.getHeight()*2; j+=2){
-				ColorType c = new ColorType(0,0,0);
-				int count = 0;
-				if (map.containsKey(j)) {
-						List<Point2D> list = map.get(j);
-						for (Point2D point2D : list){
-							if (point2D.x == i){
-								count ++;
-								c.r += point2D.c.r;
-								c.g += point2D.c.g;
-								c.b += point2D.c.b;
-							}
-							if (point2D.x == i+1){
-								count++;
-								c.r += point2D.c.r;
-								c.g += point2D.c.g;
-								c.b += point2D.c.b;
-							}
-						}
-				}
-				if (map.containsKey(j+1)) {
-						List<Point2D> list = map.get(j+1);
-						for (Point2D point2D : list){
-							if (point2D.x == i){
-								count ++;
-								c.r += point2D.c.r;
-								c.g += point2D.c.g;
-								c.b += point2D.c.b;
-							}
-							if (point2D.x == i+1){
-								count++;
-								c.r += point2D.c.r;
-								c.g += point2D.c.g;
-								c.b += point2D.c.b;
-							}
-						}
-				}
-				int x = i/2;
-				int y = j/2;
-				if (count != 0) {
-					c.r /= count;
-					c.g /= count;
-					c.b /= count;
-				}
-				c.r /= 4;
-				c.g /= 4;
-				c.b /= 4;
-				c.r *= count;
-				c.g *= count;
-				c.b *= count;
-				drawPoint(buff, new Point2D(x, y, c));
-			}
-		}
-	}
-
 	private static HashMap<Integer,List<Point2D>> getLinePoints(Point2D p1, Point2D p2) {
 		Point2D temp1 = new Point2D(p1);
 		Point2D temp2 = new Point2D(p2);
@@ -293,6 +225,74 @@ public class SketchBase
 		for (Integer key: points.keySet()){
 			for (Point2D point2D: points.get(key)){
 				buff.setRGB(point2D.x, buff.getHeight()- point2D.y-1, texture.getRGB(point2D.x % texture.getWidth(), point2D.y % texture.getHeight()));
+			}
+		}
+	}
+
+	public static void drawLineWithAntiAliased(BufferedImage buff, Point2D p1, Point2D p2){
+		Point2D temp1 = new Point2D(p1);
+		Point2D temp2 = new Point2D(p2);
+		temp1.x *= 2;
+		temp1.y *= 2;
+		temp2.x *= 2;
+		temp2.y *= 2;
+		HashMap<Integer, List<Point2D>> map = getLinePoints(temp1, temp2);
+		drawPointsWithAliased(map, buff);
+	}
+
+	private static void drawPointsWithAliased(HashMap<Integer, List<Point2D>> map, BufferedImage buff) {
+		for (int i = 0; i < buff.getWidth()*2; i+=2){
+			for (int j = 0 ; j < buff.getHeight()*2; j+=2){
+				ColorType c = new ColorType(0,0,0);
+				int count = 0;
+				if (map.containsKey(j)) {
+					List<Point2D> list = map.get(j);
+					for (Point2D point2D : list){
+						if (point2D.x == i){
+							count ++;
+							c.r += point2D.c.r;
+							c.g += point2D.c.g;
+							c.b += point2D.c.b;
+						}
+						if (point2D.x == i+1){
+							count++;
+							c.r += point2D.c.r;
+							c.g += point2D.c.g;
+							c.b += point2D.c.b;
+						}
+					}
+				}
+				if (map.containsKey(j+1)) {
+					List<Point2D> list = map.get(j+1);
+					for (Point2D point2D : list){
+						if (point2D.x == i){
+							count ++;
+							c.r += point2D.c.r;
+							c.g += point2D.c.g;
+							c.b += point2D.c.b;
+						}
+						if (point2D.x == i+1){
+							count++;
+							c.r += point2D.c.r;
+							c.g += point2D.c.g;
+							c.b += point2D.c.b;
+						}
+					}
+				}
+				int x = i/2;
+				int y = j/2;
+				if (count != 0) {
+					c.r /= count;
+					c.g /= count;
+					c.b /= count;
+				}
+				c.r /= 4;
+				c.g /= 4;
+				c.b /= 4;
+				c.r *= count;
+				c.g *= count;
+				c.b *= count;
+				drawPoint(buff, new Point2D(x, y, c));
 			}
 		}
 	}
