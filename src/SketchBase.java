@@ -5,7 +5,7 @@
 //   Subroutines to manage and draw points, lines an triangles
 //
 // History :
-//   Aug 2014 Created by Jianming Zhang (jimmie33@gmail.com) based on code by
+//   Sep 2020 Created by Tian Chen (ct970808@bu.edu) based on code by
 //   Stan Sclaroff (from CS480 '06 poly.c)
 
 import java.awt.image.BufferedImage;
